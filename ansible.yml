@@ -1,0 +1,27 @@
+---
+- name: Install and start Apache web server
+  hosts: webservers
+  become: yes  # Use privilege escalation (sudo) for tasks that require it
+  tasks:
+
+    - name: Install Apache HTTP server
+      yum:
+        name: httpd
+        state: present
+
+    - name: Ensure the Apache service is started and enabled
+      systemd:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Deploy a simple index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+          <head><title>Welcome to Ansible</title></head>
+          <body>
+          <h1>Deployed using Ansible</h1>
+          </body>
+          </html>
